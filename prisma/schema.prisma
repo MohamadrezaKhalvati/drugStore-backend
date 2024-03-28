@@ -5,10 +5,74 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id       String @id @default(uuid()) @db.Uuid
+    username String @unique
+    email    String @unique
+    password String
+    role     Role   @default(STAFF)
+}
+
+enum Role {
+    ADMIN
+    PHARMACIST
+    STAFF
+}
+
+model Product {
+    id           String         @id @default(uuid()) @db.Uuid
+    name         String
+    description  String?
+    price        Float
+    quantity     Int
+    OrderProduct OrderProduct[]
+    Inventory    Inventory[]
+}
+
+model Order {
+    id         String         @id @default(uuid()) @db.Uuid
+    customer   Customer       @relation(fields: [id], references: [id])
+    customerId Int
+    products   OrderProduct[]
+    total      Float
+    status     OrderStatus
+}
+
+model OrderProduct {
+    id        String  @id @default(uuid()) @db.Uuid
+    order     Order   @relation(fields: [id], references: [id], map: "order_fk")
+    orderId   Int
+    product   Product @relation(fields: [id], references: [id], map: "product_fk")
+    productId Int
+    quantity  Int
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
+}
+
+model Customer {
+    id      String  @id @default(uuid()) @db.Uuid
+    name    String
+    email   String
+    address String
+    phone   String
+    Order   Order[]
+}
+
+model Inventory {
+    id        String  @id @default(uuid()) @db.Uuid
+    product   Product @relation(fields: [id], references: [id])
+    productId Int
+    quantity  Int
 }
