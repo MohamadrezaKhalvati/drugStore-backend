@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -19,12 +13,6 @@ model User {
     email    String @unique
     password String
     role     Role   @default(STAFF)
-}
-
-enum Role {
-    ADMIN
-    PHARMACIST
-    STAFF
 }
 
 model Product {
@@ -55,12 +43,6 @@ model OrderProduct {
     quantity  Int
 }
 
-enum OrderStatus {
-    PENDING
-    COMPLETED
-    CANCELLED
-}
-
 model Customer {
     id      String  @id @default(uuid()) @db.Uuid
     name    String
@@ -75,4 +57,16 @@ model Inventory {
     product   Product @relation(fields: [id], references: [id])
     productId Int
     quantity  Int
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
+}
+
+enum Role {
+    ADMIN
+    PHARMACIST
+    STAFF
 }
