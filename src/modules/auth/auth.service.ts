@@ -9,88 +9,88 @@ import { JwtPayloadType } from './guards/token.guard'
 var crypto = require('crypto')
 @Injectable()
 export class AuthService {
-  constructor(
-    private prisma: PrismaService,
-    private jwt: JwtService,
-    private userService: UserService,
-  ) {}
+	constructor(
+		private prisma: PrismaService,
+		private jwt: JwtService,
+		private userService: UserService,
+	) {}
 
-  async signUp(input: SignUpInput) {
-    const { data } = input
+	async signUp(input: SignUpInput) {
+		const { data } = input
 
-    this.verifyPasswordEqualToConfirmPassword(
-      data.password,
-      data.confirmPassword,
-    )
+		this.verifyPasswordEqualToConfirmPassword(
+			data.password,
+			data.confirmPassword,
+		)
 
-    const hashedPassword = await this.hashedPassword(data.password)
-    const createUserInput: CreateUserInput = {
-      data: {
-        email: data.email,
-        hashedPassword: hashedPassword,
-        username: data.username,
-        role: data.role,
-      },
-    }
-    return await this.userService.createUser(createUserInput)
-  }
+		const hashedPassword = await this.hashedPassword(data.password)
+		const createUserInput: CreateUserInput = {
+			data: {
+				email: data.email.toLowerCase(),
+				username: data.username.toLowerCase(),
+				hashedPassword: hashedPassword,
+				role: data.role,
+			},
+		}
+		return await this.userService.createUser(createUserInput)
+	}
 
-  async login(input: LoginInput) {
-    const { data } = input
+	async login(input: LoginInput) {
+		const { data } = input
 
-    const user = await this.verifyUserForLogin(input)
+		const user = await this.verifyUserForLogin(input)
 
-    const payload: JwtPayloadType = {
-      id: user.id,
-      username: user.username.toLowerCase(),
-      role: user.role,
-    }
+		const payload: JwtPayloadType = {
+			id: user.id,
+			username: user.username.toLowerCase(),
+			role: user.role,
+		}
 
-    const token = await this.signPayload(payload)
+		const token = await this.signPayload(payload)
 
-    return { jwt: token }
-  }
+		return { jwt: token }
+	}
 
-  private verifyPasswordEqualToConfirmPassword(
-    password: string,
-    confignPassword: string,
-  ) {
-    password !== confignPassword
-      ? console.log('error in verifyPasswordEqualToConfirmPassword')
-      : true
-  }
+	private verifyPasswordEqualToConfirmPassword(
+		password: string,
+		confignPassword: string,
+	) {
+		password !== confignPassword
+			? console.log('error in verifyPasswordEqualToConfirmPassword')
+			: true
+	}
 
-  async verifyUserForLogin(input: LoginInput) {
-    const { data } = input
-    const hashedPassword = await this.hashedPassword(data.password)
-    const user = await this.prisma.user.findFirst({
-      where: {
-        username: data.username.toLowerCase(),
-        password: hashedPassword,
-        isActive: true,
-      },
-    })
+	async verifyUserForLogin(input: LoginInput) {
+		const { data } = input
+		const hashedPassword = await this.hashedPassword(data.password)
+		const user = await this.prisma.user.findFirst({
+			where: {
+				username: data.username.toLowerCase(),
+				password: hashedPassword,
+				isActive: true,
+			},
+		})
 
-    if (!user)
-      //TODO : error handling in verifyUserForLogin
-      console.log('err')
+		if (!user)
+			//TODO : error handling in verifyUserForLogin
+			console.log('err')
 
-    return user
-  }
+		return user
+	}
 
-  private signPayload(input: PayloadType) {
-    return this.jwt.sign(input)
-  }
+	private signPayload(input: PayloadType) {
+		return this.jwt.sign(input)
+	}
 
-  async hashedPassword(mainPassword: String) {
-    const hash = await crypto
-      .pbkdf2Sync(mainPassword, 'salt', 1000, 64, `sha512`)
-      .toString('hex')
-    return hash
-  }
+	async hashedPassword(mainPassword: String) {
+		const hash = await crypto
+			.pbkdf2Sync(mainPassword, 'salt', 1000, 64, `sha512`)
+			.toString('hex')
+		return hash
+	}
 }
 type PayloadType = {
-  id: string
-  username: string
-  role: string
+	id: string
+	username: string
+	role: string
 }
