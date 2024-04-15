@@ -6,6 +6,7 @@ import {
 	IsEmail,
 	IsEnum,
 	IsOptional,
+	IsPhoneNumber,
 	IsString,
 	ValidateNested,
 } from 'class-validator'
@@ -35,6 +36,11 @@ class UpdateUserData {
 	@IsOptional()
 	@IsBoolean()
 	isActive?: boolean
+
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsPhoneNumber('IR')
+	phoneNumber: number
 }
 
 export class UpdateUserInput {

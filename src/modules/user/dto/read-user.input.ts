@@ -6,6 +6,7 @@ import {
 	IsDateString,
 	IsEnum,
 	IsOptional,
+	IsPhoneNumber,
 	IsString,
 	IsUUID,
 	ValidateNested,
@@ -28,6 +29,11 @@ class ReadUserData {
 	@IsOptional()
 	@IsString()
 	username?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsPhoneNumber('IR')
+	phoneNubmer?: number
 
 	@ApiPropertyOptional()
 	@IsOptional()

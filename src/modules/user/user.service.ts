@@ -14,6 +14,7 @@ export class UserService {
 		username: true,
 		email: true,
 		role: true,
+		phoneNumber: true,
 	}
 
 	constructor(private prisma: PrismaService) {}
@@ -32,6 +33,7 @@ export class UserService {
 				username: data.username,
 				role: data.role,
 				name: data.name,
+				phoneNumber: data.phoneNumber,
 			},
 			select: this.readonlySelectUser,
 		})
@@ -72,6 +74,7 @@ export class UserService {
 			email: rawWhere.email,
 			createDate: rawWhere.createDate,
 			updateDate: rawWhere.updateDate,
+			password: rawWhere.password,
 		}
 
 		whereClause = cleanDeep(whereClause)

@@ -5,6 +5,7 @@ import {
 	IsEmail,
 	IsEnum,
 	IsOptional,
+	IsPhoneNumber,
 	IsString,
 	ValidateNested,
 } from 'class-validator'
@@ -22,6 +23,10 @@ class SignUpData {
 	@ApiProperty()
 	@IsString()
 	confirmPassword: string
+
+	@ApiProperty()
+	@IsPhoneNumber('IR')
+	phoneNumber: number
 
 	@ApiProperty()
 	@IsString()

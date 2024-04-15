@@ -31,6 +31,7 @@ export class AuthService {
 				hashedPassword: hashedPassword,
 				role: data.role,
 				name: data.name,
+				phoneNumber: data.phoneNumber,
 			},
 		}
 		return await this.userService.createUser(createUserInput)

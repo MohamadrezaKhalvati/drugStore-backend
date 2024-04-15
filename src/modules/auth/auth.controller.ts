@@ -1,11 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { LoginInput } from './dto/login.input'
 import { SendChangePasswordCodeInput } from './dto/send-change-password-code-input'
 import { SignUpInput } from './dto/signUp.input'
 import { SubmitChangePasswordInput } from './dto/submit-change-password.input'
-
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 	constructor(private authService: AuthService) {}
@@ -29,12 +29,12 @@ export class AuthController {
 	@Post('sendChangePasswordCode')
 	@ApiOperation({ operationId: 'sendChangePasswordCode' })
 	@ApiBody({ type: SendChangePasswordCodeInput })
-	@ApiResponse({ status: 200 })
+	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
 	async sendChangePasswordCode(@Body() input: SendChangePasswordCodeInput) {}
 
 	@Post('submitChangePassword')
 	@ApiOperation({ operationId: 'submitChangePassword' })
 	@ApiBody({ type: SubmitChangePasswordInput })
-	@ApiResponse({ status: 200 })
+	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
 	async submitChangePassword(@Body() input: SubmitChangePasswordInput) {}
 }
