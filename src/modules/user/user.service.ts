@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from '../prisma/prisma.service'
+import { CreateUserInput } from './dto/create-user.input'
 @Injectable()
 export class UserService {
   readonlySelectUser = {
@@ -15,7 +16,7 @@ export class UserService {
 
   async me() {}
 
-  async createUser() {}
+  async createUser(input: CreateUserInput) {}
 
   async readUser() {}
 

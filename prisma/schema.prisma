@@ -8,65 +8,69 @@ datasource db {
 }
 
 model User {
-    id       String @id @default(uuid()) @db.Uuid
-    username String @unique
-    email    String @unique
-    password String
-    role     Role   @default(STAFF)
+    id         String   @id @default(uuid()) @db.Uuid
+    username   String   @unique
+    email      String   @unique
+    password   String
+    isActive   Boolean  @default(true)
+    role       Role?    @default(Normal)
+    createDate DateTime @default(now())
+    updateDate DateTime @updatedAt()
 }
 
 model Product {
-    id           String         @id @default(uuid()) @db.Uuid
-    name         String
-    description  String?
-    price        Float
-    quantity     Int
-    OrderProduct OrderProduct[]
-    Inventory    Inventory[]
+    id         String         @id @default(uuid()) @db.Uuid
+    createDate DateTime       @default(now())
+    updateDate DateTime       @updatedAt()
+    price      String
+    imageUrl   String?
+    status     ProductStatus? @default(Available)
+}
+
+enum ProductStatus {
+    Available
+    UnAvailable
 }
 
 model Order {
-    id         String         @id @default(uuid()) @db.Uuid
-    customer   Customer       @relation(fields: [id], references: [id])
-    customerId Int
-    products   OrderProduct[]
-    total      Float
+    id         String      @id @default(uuid()) @db.Uuid
+    createDate DateTime    @default(now())
+    updateDate DateTime    @updatedAt()
+    totlaPrice String
     status     OrderStatus
-}
+    Customer   Customer[]
 
-model OrderProduct {
-    id        String  @id @default(uuid()) @db.Uuid
-    order     Order   @relation(fields: [id], references: [id], map: "order_fk")
-    orderId   Int
-    product   Product @relation(fields: [id], references: [id], map: "product_fk")
-    productId Int
-    quantity  Int
-}
-
-model Customer {
-    id      String  @id @default(uuid()) @db.Uuid
-    name    String
-    email   String
-    address String
-    phone   String
-    Order   Order[]
-}
-
-model Inventory {
-    id        String  @id @default(uuid()) @db.Uuid
-    product   Product @relation(fields: [id], references: [id])
-    productId Int
-    quantity  Int
+    //TODO : CTA 
 }
 
 enum OrderStatus {
-    PENDING
-    COMPLETED
-    CANCELLED
+    payyed
+}
+
+model Customer {
+    id             String       @id @default(uuid()) @db.Uuid
+    name           String
+    lastActivity   DateTime
+    orderHistory   String
+    paymentMethod  String
+    contanctInfoId String       @db.Uuid
+    createDate     DateTime     @default(now())
+    updateDate     DateTime     @updatedAt()
+    orderId        String       @db.Uuid
+    medicalRecord  Order        @relation(fields: [orderId], references: [id])
+    contanctInfo   ContanctInfo @relation(fields: [contanctInfoId], references: [id])
 }
 
 enum Role {
-    ADMIN
-    PHARMACIST
-    STAFF
+    Admin
+    Normal
+    Manager
+    pharmacists
+}
+
+model ContanctInfo {
+    id          String     @id @default(uuid()) @db.Uuid
+    phoneNumber String
+    email       String
+    Customer    Customer[]
 }
