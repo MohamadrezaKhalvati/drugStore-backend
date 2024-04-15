@@ -1,73 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Drug Store Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Introduction
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Welcome to the Drug Store Management System, a Nest.js project designed to streamline the management processes of a drug store. This system provides a platform for efficiently managing inventory, sales, customer data, and other essential aspects of a drug store.
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+-   **User Management**: Manage users with roles and permissions for accessing the system.
+-   **Authentication**: Securely authenticate users to access the system.
+-   **Order Management**: Record and manage orders placed by customers.
+-   **Customer Management**: Maintain customer records and manage interactions for improved service.
+-   **Product Management**: Manage the inventory of products available in the store.
+-   **Sales Management**: Record and monitor sales transactions, including generating invoices and receipts.
+-   **Customization**: Customize the system according to specific business requirements and preferences.
 
-## Installation
+## Technologies Used
+
+-   **Nest.js**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+-   **TypeScript**: A statically typed superset of JavaScript that compiles to plain JavaScript for enhanced development experience and code quality.
+-   **PostgreSQL**: A powerful, open-source relational database management system for storing and managing data efficiently.
+-   **JWT (JSON Web Tokens)**: For secure authentication and authorization of users.
+-   **Swagger**: Generate interactive API documentation for easy testing and understanding of endpoints.
+
+## Getting Started
+
+To get started with the Drug Store Management System, follow these steps:
+
+1. **Clone the repository**:
+
+    ```bash
+    git clone <repository_url>
+    ```
+
+2. **Install dependencies**:
+
+    ```bash
+    cd drug-store-management-system
+    npm install
+    ```
+
+3. **Set Up Environment Variables**
+
+    To configure environment variables such as database connection details, JWT secret, etc., follow these steps:
+
+    Create a `.env` file in the root directory of the project.
+    Define the environment variables in the `.env` file in the following format:
+    bash
+
+    ```
+    DATABASE_URL
+    JWT_EXPIRATION_DATE
+    JWT_SECRET_TOKEN
+    ```
+
+    Replace the placeholder values (DATABASE_URL, JWT_EXPIRATION_DATE, JWT_SECRET_TOKEN) with your actual database connection details and JWT secret.
+
+## Run the Application
+
+To run the application in development mode, execute the following command in your terminal:
 
 ```bash
-$ npm install
+npm run start:dev
 ```
 
-## Running the app
+## API Documentation
 
-```bash
-# development
-$ npm run start
+The Drug Store Management System API is documented using Swagger. Once the application is running, you can access the Swagger documentation at `/api/docs`.
 
-# watch mode
-$ npm run start:dev
+## Contributing
 
-# production mode
-$ npm run start:prod
-```
+Contributions to the Drug Store Management System are welcome! To contribute, follow these steps:
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/my-feature`).
+3. Commit your changes (`git commit -am 'Add my feature'`).
+4. Push to the branch (`git push origin feature/my-feature`).
+5. Open a pull request.
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For any inquiries or support, please contact [Mohamadreza](mohamadrezakhf@example.com).
