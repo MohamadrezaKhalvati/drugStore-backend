@@ -1,8 +1,41 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { Role } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { IsString, ValidateNested } from 'class-validator'
+import {
+	IsBoolean,
+	IsEmail,
+	IsEnum,
+	IsOptional,
+	IsString,
+	ValidateNested,
+} from 'class-validator'
 
-class UpdateUserData {}
+class UpdateUserData {
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsString()
+	username?: string
+
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsString()
+	name?: string
+
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsEmail()
+	email?: string
+
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsEnum(Role)
+	role?: Role
+
+	@ApiPropertyOptional({ nullable: true })
+	@IsOptional()
+	@IsBoolean()
+	isActive?: boolean
+}
 
 export class UpdateUserInput {
 	@ApiProperty()

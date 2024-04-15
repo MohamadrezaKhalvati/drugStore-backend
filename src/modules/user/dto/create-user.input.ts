@@ -4,28 +4,32 @@ import { Type } from 'class-transformer'
 import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator'
 
 class CreateUserData {
-  @ApiProperty()
-  @IsString()
-  username: string
+	@ApiProperty()
+	@IsString()
+	username: string
 
-  @ApiProperty()
-  @IsString()
-  //   @IsHash()
-  hashedPassword: string
+	@ApiProperty()
+	@IsString()
+	//   @IsHash()
+	hashedPassword: string
 
-  @ApiProperty()
-  @IsString()
-  email: string
+	@ApiProperty()
+	@IsString()
+	name: string
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsEnum(Role)
-  role?: Role
+	@ApiProperty()
+	@IsString()
+	email: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsEnum(Role)
+	role?: Role
 }
 
 export class CreateUserInput {
-  @ApiProperty({ type: CreateUserData })
-  @Type(() => CreateUserData)
-  @ValidateNested()
-  data: CreateUserData
+	@ApiProperty({ type: CreateUserData })
+	@Type(() => CreateUserData)
+	@ValidateNested()
+	data: CreateUserData
 }

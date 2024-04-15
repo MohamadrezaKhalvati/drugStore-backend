@@ -30,6 +30,7 @@ export class AuthService {
 				username: data.username.toLowerCase(),
 				hashedPassword: hashedPassword,
 				role: data.role,
+				name: data.name,
 			},
 		}
 		return await this.userService.createUser(createUserInput)
