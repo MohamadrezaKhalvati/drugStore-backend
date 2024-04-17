@@ -1,8 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { ProductStatus } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { ValidateNested } from 'class-validator'
+import { IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator'
 
-class CreateProductData {}
+class CreateProductData {
+	@ApiProperty({ type: String })
+	@IsString()
+	name: string
+
+	@ApiProperty({ type: String })
+	@IsString()
+	description: string
+
+	@ApiProperty({ type: Number })
+	@IsNumber()
+	price: number
+
+	@ApiProperty({ type: String })
+	@IsString()
+	imageUrl: string
+
+	@ApiProperty({ type: ProductStatus })
+	@IsEnum(ProductStatus)
+	role: ProductStatus
+}
 
 export class CreateProductInput {
 	@ApiProperty({ type: CreateProductData })

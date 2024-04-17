@@ -13,7 +13,7 @@ export class ProductService {
 
 	async readProduct(input: ReadProductInput) {}
 
-	async readSpeceficProduct() {}
+	async readSpeceficProduct(id: string) {}
 
 	async updateProduct(input: UpdateProductInput) {}
 
