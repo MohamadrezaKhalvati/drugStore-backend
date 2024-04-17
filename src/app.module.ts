@@ -7,13 +7,13 @@ import { ProductModule } from './modules/product/product.module'
 import { UserModule } from './modules/user/user.module'
 
 @Module({
-  imports: [
-    UserModule,
-    PrismaModule,
-    AuthModule,
-    ProductModule,
-    OrderModule,
-    CustomerModule,
-  ],
+	imports: [
+		UserModule,
+		PrismaModule,
+		AuthModule,
+		ProductModule,
+		OrderModule,
+		CustomerModule,
+	],
 })
 export class AppModule {}

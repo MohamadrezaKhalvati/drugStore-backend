@@ -94,8 +94,8 @@ export class UserService {
 
 		let myUserName = data.username
 		let myEmail = data.email
-		let myName = data.name
-		let myIsActive = data.isActive
+		const myName = data.name
+		const myIsActive = data.isActive
 
 		if (!!data.username) {
 			myUserName = await this.verifyIsUsernameNotDuplicate(

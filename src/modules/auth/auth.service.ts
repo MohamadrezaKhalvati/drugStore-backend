@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import crypto from 'crypto'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateUserInput } from '../user/dto/create-user.input'
 import { UserService } from '../user/user.service'
 import { LoginInput } from './dto/login.input'
 import { SignUpInput } from './dto/signUp.input'
 import { JwtPayloadType } from './guards/token.guard'
-var crypto = require('crypto')
 @Injectable()
 export class AuthService {
 	constructor(
@@ -84,7 +84,7 @@ export class AuthService {
 		return this.jwt.sign(input)
 	}
 
-	async hashedPassword(mainPassword: String) {
+	async hashedPassword(mainPassword: string) {
 		const hash = await crypto
 			.pbkdf2Sync(mainPassword, 'salt', 1000, 64, `sha512`)
 			.toString('hex')
