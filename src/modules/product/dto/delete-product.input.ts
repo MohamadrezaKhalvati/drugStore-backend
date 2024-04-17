@@ -5,7 +5,7 @@ import { IsString, ValidateNested } from 'class-validator'
 class DeleteProductData {
 	@ApiProperty()
 	@IsString()
-	data: string
+	id: string
 }
 
 export class DeleteProductInput {

@@ -35,6 +35,6 @@ export class AuthController {
 	@Post('submitChangePassword')
 	@ApiOperation({ operationId: 'submitChangePassword' })
 	@ApiBody({ type: SubmitChangePasswordInput })
-	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
+	@ApiResponse({ status: 200 })
 	async submitChangePassword(@Body() input: SubmitChangePasswordInput) {}
 }

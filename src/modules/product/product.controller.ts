@@ -1,5 +1,9 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common'
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { CreateProductInput } from './dto/create-product.input'
+import { DeleteProductInput } from './dto/delete-product.input'
+import { ReadProductInput } from './dto/read-product.input'
+import { UpdateProductInput } from './dto/update-product.input'
 import { ProductService } from './product.service'
 
 @ApiTags('Product')
@@ -9,21 +13,25 @@ export class ProductController {
 
 	@Post('createProduct')
 	@ApiOperation({ operationId: 'createProduct' })
-	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
-	async createProduct() {}
+	@ApiBody({ type: CreateProductInput })
+	@ApiResponse({ status: 200 })
+	async createProduct(@Body() input: CreateProductInput) {}
 
 	@Get('readProduct')
 	@ApiOperation({ operationId: 'readProduct' })
-	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
-	async readProduct() {}
+	@ApiBody({ type: ReadProductInput })
+	@ApiResponse({ status: 200 })
+	async readProduct(@Body() input: ReadProductInput) {}
 
 	@Get('updateProduct')
 	@ApiOperation({ operationId: 'updateProduct' })
-	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
-	async updateProduct() {}
+	@ApiBody({ type: UpdateProductInput })
+	@ApiResponse({ status: 200 })
+	async updateProduct(@Body() input: UpdateProductInput) {}
 
 	@Delete('deleteProduct')
 	@ApiOperation({ operationId: 'deleteProduct' })
-	@ApiResponse({ status: 403, description: 'NOT IMPLEMENTED' })
-	async deleteProduct() {}
+	@ApiBody({ type: DeleteProductInput })
+	@ApiResponse({ status: 200 })
+	async deleteProduct(@Body() input: DeleteProductInput) {}
 }

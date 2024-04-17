@@ -13,7 +13,6 @@ function setupCors(app: INestApplication) {
 }
 
 function setupGlobalValidation(app: INestApplication) {
-	// app.useGlobalFilters(new CoreExceptionFilter())
 	app.useGlobalPipes(new ValidationPipe({ transform: true }))
 }
 
@@ -26,10 +25,11 @@ function setupSwagger(app: INestApplication) {
 	const document = SwaggerModule.createDocument(app, config)
 	SwaggerModule.setup('api', app, document)
 
-	app.use('/api	', (_, res: ServerResponse) =>
+	app.use('/api-doc', (_, res: ServerResponse) =>
 		res.end(JSON.stringify(document)),
 	)
 
+	console.log()
 	return document
 }
 
