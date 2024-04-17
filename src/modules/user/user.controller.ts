@@ -15,11 +15,14 @@ export class UserController {
 	@ApiOperation({ operationId: 'createUser' })
 	@ApiBody({ type: CreateUserInput })
 	@ApiResponse({ status: 200 })
-	async createUser(@Body() input: CreateUserInput) {}
+	async createUser(@Body() input: CreateUserInput) {
+		return await this.userService.createUser(input)
+	}
 
 	@Put('updateUser')
 	@ApiOperation({ operationId: 'updateUser' })
 	@ApiResponse({ status: 200 })
+	@ApiBody({ type: UpdateUserInput })
 	async updateUser(
 		@Body() input: UpdateUserInput,
 		@GetUserId() requesterId: string,
@@ -30,6 +33,7 @@ export class UserController {
 	@Delete('deleteUser')
 	@ApiOperation({ operationId: 'deleteUser' })
 	@ApiResponse({ status: 200 })
+	@ApiBody({ type: DeleteUserInput })
 	async deleteUser(@Body() input: DeleteUserInput) {
 		return await this.userService.deleteUser(input)
 	}
@@ -37,6 +41,7 @@ export class UserController {
 	@Get('readUser')
 	@ApiOperation({ operationId: 'readUser' })
 	@ApiResponse({ status: 200 })
+	@ApiBody({ type: ReadUserInput })
 	async readUser(@Body() input: ReadUserInput) {
 		return await this.userService.readUser(input)
 	}

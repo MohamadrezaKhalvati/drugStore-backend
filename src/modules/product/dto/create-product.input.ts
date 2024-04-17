@@ -20,7 +20,7 @@ class CreateProductData {
 	@IsString()
 	imageUrl: string
 
-	@ApiProperty({ type: ProductStatus })
+	@ApiProperty()
 	@IsEnum(ProductStatus)
 	role: ProductStatus
 }

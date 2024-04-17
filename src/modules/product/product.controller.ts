@@ -29,7 +29,6 @@ export class ProductController {
 
 	@Get('readSpeceficProduct:id')
 	@ApiOperation({ operationId: 'readSpeceficProduct' })
-	@ApiBody({ type: null })
 	@ApiResponse({ status: 200 })
 	async readSpeceficProduct(@Param() id: string) {
 		return await this.productService.readSpeceficProduct(id)

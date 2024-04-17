@@ -37,7 +37,7 @@ class ReadProductData {
 	@IsString()
 	imageUrl?: string
 
-	@ApiPropertyOptional({ type: ProductStatus })
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsEnum(ProductStatus)
 	role?: ProductStatus

@@ -31,7 +31,7 @@ class UpdateProductData {
 	@IsString()
 	imageUrl?: string
 
-	@ApiPropertyOptional({ type: ProductStatus })
+	@ApiPropertyOptional()
 	@IsOptional()
 	@IsEnum(ProductStatus)
 	role?: ProductStatus
