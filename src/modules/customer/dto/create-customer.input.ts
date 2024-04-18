@@ -1,8 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { ValidateNested } from 'class-validator'
+import { IsString, ValidateNested } from 'class-validator'
 
-class CreateCustomerData {}
+class CreateCustomerData {
+	@ApiProperty()
+	@IsString()
+	name: string
+}
 
 export class CreateCustomerInput {
 	@ApiProperty()

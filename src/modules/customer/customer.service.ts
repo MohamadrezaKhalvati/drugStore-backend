@@ -9,7 +9,11 @@ import { UpdateCustomerInput } from './dto/update-customer.input'
 export class CustomerService {
 	constructor(private prisma: PrismaService) {}
 
-	async createCustomer(input: CreateCustomerInput) {}
+	async createCustomer(input: CreateCustomerInput) {
+		const { data } = input
+	}
+
+	async createCustomerContanctInfo(input) {}
 
 	async readCustomer(input: ReadCustomerInput) {}
 
