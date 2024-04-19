@@ -85,7 +85,7 @@ export class UserService {
 			...input?.sortyBy?.convertToPrismaFilter(),
 			...input?.pagination?.convertToPrismaFilter(),
 		})
-		return createPaginationResult({ count, entity })
+		return await createPaginationResult({ count, entity })
 	}
 
 	async updateUser(input: UpdateUserInput, requesterId: string) {

@@ -1,10 +1,39 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
+import { OrderStatus } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { IsOptional, ValidateNested } from 'class-validator'
+import {
+	IsEnum,
+	IsOptional,
+	IsString,
+	IsUUID,
+	ValidateNested,
+} from 'class-validator'
 import { PaginationData } from 'src/common/pagination.input'
 import { SortByData } from 'src/common/sort-by.input'
 
-class ReadOrderData {}
+class ReadOrderData {
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@IsUUID()
+	id?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	@IsUUID()
+	customerId?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsString()
+	notes?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsEnum(OrderStatus)
+	status?: OrderStatus
+}
 
 export class ReadOrderInput {
 	@ApiPropertyOptional({ type: ReadOrderData })
