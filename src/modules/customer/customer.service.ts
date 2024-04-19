@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateCustomerInput } from './dto/create-customer.input'
 import { DeleteCustomerInput } from './dto/delete-customer.input'
@@ -20,4 +20,13 @@ export class CustomerService {
 	async updateCustomer(input: UpdateCustomerInput) {}
 
 	async deleteCustomer(input: DeleteCustomerInput) {}
+
+	async verifyIfCustomerExistance(id: string) {
+		const customer = await this.prisma.customer.findFirst({
+			where: { id },
+		})
+		if (!customer) {
+			throw new NotFoundException(`customer with this id ${id} not found`)
+		}
+	}
 }

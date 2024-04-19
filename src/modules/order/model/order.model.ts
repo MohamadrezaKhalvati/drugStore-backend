@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { BillingAddress, Customer, Product } from '@prisma/client'
+import { Customer } from '@prisma/client'
+import { ProductModel } from 'src/modules/product/model/product.model'
+import { BillingAddressModel } from '../dto/billingAddress..model'
 
 export class OrderModel {
 	@ApiProperty()
@@ -12,11 +14,11 @@ export class OrderModel {
 	orderDate: Date
 
 	@ApiProperty()
-	billingAddress: BillingAddress
+	billingAddress: BillingAddressModel
 
 	@ApiProperty()
 	note?: string
 
 	@ApiProperty()
-	items: Product[]
+	items: ProductModel[]
 }

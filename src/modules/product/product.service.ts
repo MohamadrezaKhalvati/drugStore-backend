@@ -35,7 +35,8 @@ export class ProductService {
 				id,
 			},
 		})
-		if (!product) throw new NotFoundException('product not found')
+		if (!product)
+			throw new NotFoundException(`product with this id ${id} not found`)
 		return product
 	}
 }

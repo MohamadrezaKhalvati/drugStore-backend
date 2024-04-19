@@ -21,41 +21,50 @@ model User {
 }
 
 model Product {
-    id          String         @id @default(uuid()) @db.Uuid
-    name        String
-    description String
-    price       Float
-    imageUrl    String?
-    createDate  DateTime       @default(now())
-    updateDate  DateTime       @updatedAt()
-    status      ProductStatus? @default(Available)
-    Order       Order?         @relation(fields: [orderId], references: [id])
-    orderId     String?        @db.Uuid
+    id           String         @id @default(uuid()) @db.Uuid
+    name         String
+    description  String
+    price        Float
+    imageUrl     String?
+    createDate   DateTime       @default(now())
+    updateDate   DateTime       @updatedAt()
+    status       ProductStatus? @default(Available)
+    OrderProduct OrderProduct[]
 }
 
 model Order {
+    id           String         @id @default(uuid()) @db.Uuid
+    customer     Customer       @relation(fields: [customerId], references: [id])
+    customerId   String         @db.Uuid
+    notes        String?
+    createDate   DateTime       @default(now())
+    updateDate   DateTime       @updatedAt()
+    status       OrderStatus    @default(UnPaid)
+    OrderProduct OrderProduct[]
+}
+
+model OrderProduct {
     id               String         @id @default(uuid()) @db.Uuid
-    customer         Customer       @relation(fields: [customerId], references: [id])
-    customerId       String         @db.Uuid
+    quantity         Int
+    totalPrice       Float
+    orderId          String         @unique @db.Uuid
+    productId        String         @unique @db.Uuid
+    billingAddressId String         @unique @db.Uuid
+    order            Order          @relation(fields: [orderId], references: [id])
+    product          Product        @relation(fields: [productId], references: [id])
     billingAddress   BillingAddress @relation(fields: [billingAddressId], references: [id])
-    notes            String?
-    billingAddressId String         @db.Uuid
-    items            Product[]
-    createDate       DateTime       @default(now())
-    updateDate       DateTime       @updatedAt()
-    status           OrderStatus    @default(UnPaid)
 }
 
 model BillingAddress {
-    id         String   @id @default(uuid()) @db.Uuid
-    street     String
-    city       String
-    Province   String
-    PostalCode String
-    Country    String
-    createDate DateTime @default(now())
-    updateDate DateTime @updatedAt()
-    Order      Order[]
+    id           String         @id @default(uuid()) @db.Uuid
+    street       String
+    city         String
+    Province     String
+    PostalCode   String
+    Country      String
+    createDate   DateTime       @default(now())
+    updateDate   DateTime       @updatedAt()
+    OrderProduct OrderProduct[]
 }
 
 model Customer {
