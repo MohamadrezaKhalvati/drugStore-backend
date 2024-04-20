@@ -16,30 +16,24 @@ export class AuthService {
 	) {}
 
 	async signUp(input: SignUpInput) {
-		const { data } = input
-
 		this.verifyPasswordEqualToConfirmPassword(
-			data.password,
-			data.confirmPassword,
+			input.password,
+			input.confirmPassword,
 		)
 
-		const hashedPassword = await this.hashedPassword(data.password)
+		const hashedPassword = await this.hashedPassword(input.password)
 		const createUserInput: CreateUserInput = {
-			data: {
-				email: data.email.toLowerCase(),
-				username: data.username.toLowerCase(),
-				hashedPassword: hashedPassword,
-				role: data.role,
-				name: data.name,
-				phoneNumber: data.phoneNumber,
-			},
+			email: input.email.toLowerCase(),
+			username: input.username.toLowerCase(),
+			phoneNumber: input.phoneNumber,
+			hashedPassword: hashedPassword,
+			role: input.role,
+			name: input.name,
 		}
 		return await this.userService.createUser(createUserInput)
 	}
 
 	async login(input: LoginInput) {
-		const { data } = input
-
 		const user = await this.verifyUserForLogin(input)
 
 		const payload: JwtPayloadType = {
@@ -63,11 +57,11 @@ export class AuthService {
 	}
 
 	async verifyUserForLogin(input: LoginInput) {
-		const { data } = input
-		const hashedPassword = await this.hashedPassword(data.password)
+		const { username, password } = input
+		const hashedPassword = await this.hashedPassword(password)
 		const user = await this.prisma.user.findFirst({
 			where: {
-				username: data.username.toLowerCase(),
+				username: username.toLowerCase(),
 				password: hashedPassword,
 				isActive: true,
 			},

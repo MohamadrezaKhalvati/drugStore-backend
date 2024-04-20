@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString, Length, ValidateNested } from 'class-validator'
+import { IsString, Length } from 'class-validator'
 
-export class CreateBillingAddressData {
+export class CreateBillingAddressInput {
 	@ApiProperty()
 	@IsString()
 	street: string
@@ -22,11 +22,4 @@ export class CreateBillingAddressData {
 	@ApiProperty()
 	@IsString()
 	Country: string
-}
-
-export class CreateBillingAddressInput {
-	@ApiProperty()
-	@IsString()
-	@ValidateNested()
-	data: CreateBillingAddressData
 }

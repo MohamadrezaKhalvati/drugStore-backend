@@ -21,22 +21,21 @@ export class OrderService {
 	) {}
 
 	async createOrder(input: CreateOrderInput) {
-		const { data } = input
-		await this.verifyIsBillingAddressExistance(data.billingAddressId)
-		await this.customerService.verifyIfCustomerExistance(data.customerId)
-		data.items.forEach(async productId => {
+		await this.verifyIsBillingAddressExistance(input.billingAddressId)
+		await this.customerService.verifyIfCustomerExistance(input.customerId)
+		input.items.forEach(async productId => {
 			await this.productService.verifyExistanceProduct(productId)
 		})
 
 		const order = await this.prisma.order.create({
 			data: {
-				customerId: data.customerId,
-				notes: data.note,
-				status: data.status,
+				customerId: input.customerId,
+				notes: input.note,
+				status: input.status,
 				OrderProduct: {
-					connect: data.items.map(productId => ({
+					connect: input.items.map(productId => ({
 						productId: productId,
-						billingAddressId: data.billingAddressId,
+						billingAddressId: input.billingAddressId,
 					})),
 				},
 			},
@@ -71,23 +70,25 @@ export class OrderService {
 	async updateOrder(input: UpdateOrderInput) {}
 
 	async deleteOrder(input: DeleteOrderInput) {
-		const {
-			data: { id },
-		} = input
+		const { id } = input
 		await this.verfiyIfOrderExistnce(id)
 
 		const deleteOrderProduct = this.prisma.orderProduct.delete({
 			where: { orderId: id },
-		})
-
-		const deleteOrder = this.prisma.order.delete({
-			where: { id },
+			select: {
+				billingAddressId: true,
+			},
 		})
 
 		const deleteBillingAddress = this.prisma.billingAddress.delete({
 			where: {
-				id: 'ads',
+				id: (await deleteOrderProduct).billingAddressId,
 			},
+		})
+
+		const deleteOrder = this.prisma.order.delete({
+			where: { id },
+			select: {},
 		})
 
 		const transaction = await this.prisma.$transaction([

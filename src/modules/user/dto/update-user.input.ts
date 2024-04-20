@@ -40,7 +40,7 @@ class UpdateUserData {
 	@ApiPropertyOptional({ nullable: true })
 	@IsOptional()
 	@IsPhoneNumber('IR')
-	phoneNumber: number
+	phoneNumber?: number
 }
 
 export class UpdateUserInput {

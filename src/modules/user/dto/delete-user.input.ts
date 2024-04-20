@@ -1,17 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Type } from 'class-transformer'
-import { IsString, IsUUID, ValidateNested } from 'class-validator'
+import { IsString, IsUUID } from 'class-validator'
 
-class DeleteUserData {
+export class DeleteUserInput {
 	@ApiProperty({ type: String })
 	@IsString()
 	@IsUUID()
 	id: string
-}
-
-export class DeleteUserInput {
-	@ApiProperty()
-	@Type(() => DeleteUserData)
-	@ValidateNested()
-	data: DeleteUserData
 }

@@ -1,15 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Role } from '@prisma/client'
-import { Type } from 'class-transformer'
-import {
-	IsEnum,
-	IsOptional,
-	IsPhoneNumber,
-	IsString,
-	ValidateNested,
-} from 'class-validator'
+import { IsEnum, IsOptional, IsPhoneNumber, IsString } from 'class-validator'
 
-class CreateUserData {
+export class CreateUserInput {
 	@ApiProperty()
 	@IsString()
 	username: string
@@ -35,11 +28,4 @@ class CreateUserData {
 	@IsOptional()
 	@IsEnum(Role)
 	role?: Role
-}
-
-export class CreateUserInput {
-	@ApiProperty({ type: CreateUserData })
-	@Type(() => CreateUserData)
-	@ValidateNested()
-	data: CreateUserData
 }

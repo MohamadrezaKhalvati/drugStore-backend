@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { ProductStatus } from '@prisma/client'
-import { Type } from 'class-transformer'
-import { IsEnum, IsNumber, IsString, ValidateNested } from 'class-validator'
+import { IsEnum, IsNumber, IsString } from 'class-validator'
 
-class CreateProductData {
+export class CreateProductInput {
 	@ApiProperty({ type: String })
 	@IsString()
 	name: string
@@ -23,11 +22,4 @@ class CreateProductData {
 	@ApiProperty()
 	@IsEnum(ProductStatus)
 	status: ProductStatus
-}
-
-export class CreateProductInput {
-	@ApiProperty({ type: CreateProductData })
-	@Type(() => CreateProductData)
-	@ValidateNested()
-	data: CreateProductData
 }

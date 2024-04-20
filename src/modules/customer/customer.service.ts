@@ -9,17 +9,26 @@ import { UpdateCustomerInput } from './dto/update-customer.input'
 export class CustomerService {
 	constructor(private prisma: PrismaService) {}
 
-	async createCustomer(input: CreateCustomerInput) {
-		const { data } = input
-	}
-
-	async createCustomerContanctInfo(input) {}
+	async createCustomer(input: CreateCustomerInput) {}
 
 	async readCustomer(input: ReadCustomerInput) {}
 
 	async updateCustomer(input: UpdateCustomerInput) {}
 
-	async deleteCustomer(input: DeleteCustomerInput) {}
+	async deleteCustomer(input: DeleteCustomerInput) {
+		await this.verifyIfCustomerExistance(input.id)
+
+		const deletedCustomer = await this.prisma.customer.delete({
+			where: {
+				id: input.id,
+			},
+			include: {
+				contanctInfo: true,
+				Order: true,
+			},
+		})
+		return deletedCustomer
+	}
 
 	async verifyIfCustomerExistance(id: string) {
 		const customer = await this.prisma.customer.findFirst({

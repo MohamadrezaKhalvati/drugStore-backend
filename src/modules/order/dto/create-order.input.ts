@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { OrderStatus } from '@prisma/client'
-import { Type } from 'class-transformer'
 import {
 	ArrayNotEmpty,
 	IsArray,
@@ -8,10 +7,9 @@ import {
 	IsOptional,
 	IsString,
 	IsUUID,
-	ValidateNested,
 } from 'class-validator'
 
-class CreateOrderData {
+export class CreateOrderInput {
 	@ApiProperty()
 	@IsString()
 	@IsUUID()
@@ -37,11 +35,4 @@ class CreateOrderData {
 	@IsOptional()
 	@IsString()
 	billingAddressId?: string
-}
-
-export class CreateOrderInput {
-	@ApiProperty({ type: CreateOrderData })
-	@Type(() => CreateOrderData)
-	@ValidateNested()
-	data: CreateOrderData
 }

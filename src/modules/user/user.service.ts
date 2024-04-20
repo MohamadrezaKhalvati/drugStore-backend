@@ -22,18 +22,18 @@ export class UserService {
 	async me() {}
 
 	async createUser(input: CreateUserInput) {
-		const { data } = input
-		await this.checkUniqueUsername(data.username)
-		await this.checkUniqueEmail(data.email)
+		const { email, username } = input
+		await this.checkUniqueUsername(username)
+		await this.checkUniqueEmail(email)
 
 		const user = await this.prisma.user.create({
 			data: {
-				email: data.email,
-				password: data.hashedPassword,
-				username: data.username,
-				role: data.role,
-				name: data.name,
-				phoneNumber: data.phoneNumber,
+				email: input.email,
+				password: input.hashedPassword,
+				username: input.username,
+				role: input.role,
+				name: input.name,
+				phoneNumber: input.phoneNumber,
 			},
 			select: this.readonlySelectUser,
 		})
@@ -94,6 +94,7 @@ export class UserService {
 
 		let myUserName = data.username
 		let myEmail = data.email
+		let myPhoneNumber = data.phoneNumber
 		const myName = data.name
 		const myIsActive = data.isActive
 
@@ -107,6 +108,13 @@ export class UserService {
 			myEmail = await this.verifyIsEmailIsNotDuplicate(id, data.email)
 		}
 
+		if (!!data.phoneNumber) {
+			myPhoneNumber = await this.verifyIsPhoneNumberNotDuplicate(
+				data.phoneNumber,
+				requesterId,
+			)
+		}
+
 		if (!!data.role || !!data.isActive) {
 			await this.verifyAdminUser(requesterId)
 		}
@@ -116,6 +124,8 @@ export class UserService {
 			username: myUserName,
 			role: data.role,
 			isActive: myIsActive,
+			name: myName,
+			phoneNumber: data.phoneNumber,
 		}
 
 		dataClause = cleanDeep(dataClause)
@@ -140,6 +150,26 @@ export class UserService {
 		if (!foundUser) console.log('error in verifyAdminUser')
 	}
 
+	private async verifyIsPhoneNumberNotDuplicate(
+		phoneNumber: number,
+		requesterId: string,
+	) {
+		const duplicateUser = await this.prisma.user.findMany({
+			where: { phoneNumber: phoneNumber },
+		})
+		if (duplicateUser.length == 1) {
+			if (duplicateUser[0].id == requesterId) {
+				phoneNumber = null
+				return phoneNumber
+			} else {
+				console.log('asdsad')
+			}
+		} else if (duplicateUser.length > 1) {
+			console.log('asda')
+		}
+
+		return phoneNumber
+	}
 	private async verifyIsEmailIsNotDuplicate(
 		requesterId: string,
 		email: string,
@@ -203,9 +233,7 @@ export class UserService {
 	}
 
 	async deleteUser(input: DeleteUserInput) {
-		const {
-			data: { id },
-		} = input
+		const { id } = input
 
 		const user = await this.verifyIfUserExistance(id)
 		const deletedUser = await this.prisma.user.update({

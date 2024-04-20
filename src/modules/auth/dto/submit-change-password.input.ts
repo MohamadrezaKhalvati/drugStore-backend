@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Type } from 'class-transformer'
-import { IsString, ValidateNested } from 'class-validator'
+import { IsString } from 'class-validator'
 
-class SubmitChangePasswordData {
+class SubmitChangePasswordData {}
+
+export class SubmitChangePasswordInput {
 	@ApiProperty()
 	@IsString()
 	password: string
@@ -10,11 +11,4 @@ class SubmitChangePasswordData {
 	@ApiProperty()
 	@IsString()
 	confirmPassword: string
-}
-
-export class SubmitChangePasswordInput {
-	@ApiProperty({ type: SubmitChangePasswordData })
-	@Type(() => SubmitChangePasswordData)
-	@ValidateNested()
-	data: SubmitChangePasswordData
 }

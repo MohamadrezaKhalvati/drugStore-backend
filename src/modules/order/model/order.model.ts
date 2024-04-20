@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Customer } from '@prisma/client'
 import { ProductModel } from 'src/modules/product/model/product.model'
-import { BillingAddressModel } from '../dto/billingAddress..model'
+import { BillingAddressModel } from './billingAddress.model'
 
 export class OrderModel {
 	@ApiProperty()

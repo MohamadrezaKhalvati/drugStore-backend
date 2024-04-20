@@ -1,16 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Type } from 'class-transformer'
-import { IsPhoneNumber, ValidateNested } from 'class-validator'
-
-class SendChangePasswordCodeData {
-	@ApiProperty()
-	@IsPhoneNumber('IR')
-	phoneNumber: number
-}
+import { IsPhoneNumber } from 'class-validator'
 
 export class SendChangePasswordCodeInput {
 	@ApiProperty()
-	@Type(() => SendChangePasswordCodeData)
-	@ValidateNested()
-	data: SendChangePasswordCodeData
+	@IsPhoneNumber('IR')
+	phoneNumber: number
 }

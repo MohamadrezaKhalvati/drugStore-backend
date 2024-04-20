@@ -17,17 +17,17 @@ export class ProductService {
 	constructor(private prisma: PrismaService) {}
 
 	async createProduct(input: CreateProductInput) {
-		const { data } = input
+		const { name } = input
 
-		await this.verifyIfProductNameNotDuplicated(data.name)
+		await this.verifyIfProductNameNotDuplicated(name)
 
 		const product = await this.prisma.product.create({
 			data: {
-				name: data.name,
-				description: data.description,
-				price: data.price,
-				imageUrl: data.imageUrl,
-				status: data.status,
+				name: input.name,
+				description: input.description,
+				price: input.price,
+				imageUrl: input.imageUrl,
+				status: input.status,
 			},
 		})
 
@@ -67,12 +67,12 @@ export class ProductService {
 	async updateProduct(input: UpdateProductInput) {}
 
 	async deleteProduct(input: DeleteProductInput) {
-		const { data } = input
-		await this.verifyExistanceProduct(data.id)
+		const { id } = input
+		await this.verifyExistanceProduct(id)
 
 		const deletedProduct = await this.prisma.product.delete({
 			where: {
-				id: data.id,
+				id: id,
 			},
 		})
 		return deletedProduct

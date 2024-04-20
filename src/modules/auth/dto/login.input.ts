@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Type } from 'class-transformer'
-import { IsString, ValidateNested } from 'class-validator'
+import { IsString } from 'class-validator'
 
-class LoginData {
+export class LoginInput {
 	@ApiProperty({ type: String })
 	@IsString()
 	username: string
@@ -10,11 +9,4 @@ class LoginData {
 	@ApiProperty({ type: String })
 	@IsString()
 	password: string
-}
-
-export class LoginInput {
-	@ApiProperty({ type: LoginData })
-	@Type(() => LoginData)
-	@ValidateNested()
-	data: LoginData
 }
