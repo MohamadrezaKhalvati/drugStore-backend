@@ -1,4 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+	BadRequestException,
+	Injectable,
+	NotFoundException,
+} from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+import cleanDeep from 'clean-deep'
+import { createPaginationResult } from 'src/common/pagination.input'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateProductInput } from './dto/create-product.input'
 import { DeleteProductInput } from './dto/delete-product.input'
@@ -9,11 +16,53 @@ import { UpdateProductInput } from './dto/update-product.input'
 export class ProductService {
 	constructor(private prisma: PrismaService) {}
 
-	async createProduct(input: CreateProductInput) {}
+	async createProduct(input: CreateProductInput) {
+		const { data } = input
 
-	async readProduct(input: ReadProductInput) {}
+		await this.verifyIfProductNameNotDuplicated(data.name)
 
-	async readSpeceficProduct(id: string) {}
+		const product = await this.prisma.product.create({
+			data: {
+				name: data.name,
+				description: data.description,
+				price: data.price,
+				imageUrl: data.imageUrl,
+				status: data.status,
+			},
+		})
+
+		return product
+	}
+
+	async readProduct(input: ReadProductInput) {
+		const rawWhere = input.data || {}
+		let whereClause: Prisma.ProductWhereInput = {
+			id: rawWhere.id,
+			name: rawWhere.name,
+			price: rawWhere.price,
+			status: rawWhere.status,
+			imageUrl: rawWhere.imageUrl,
+		}
+
+		whereClause = cleanDeep(whereClause)
+
+		const count = this.prisma.product.count({ where: whereClause })
+		const entity = this.prisma.product.findMany({
+			where: whereClause,
+			...input?.sortyBy?.convertToPrismaFilter(),
+			...input?.pagination?.convertToPrismaFilter(),
+		})
+		return await createPaginationResult({ count, entity })
+	}
+
+	async readSpeceficProduct(id: string) {
+		await this.verifyExistanceProduct(id)
+		const product = await this.prisma.product.findFirst({
+			where: { id: id },
+		})
+
+		return product
+	}
 
 	async updateProduct(input: UpdateProductInput) {}
 
@@ -37,6 +86,21 @@ export class ProductService {
 		})
 		if (!product)
 			throw new NotFoundException(`product with this id ${id} not found`)
+		return product
+	}
+
+	async verifyIfProductNameNotDuplicated(name: string) {
+		const product = await this.prisma.product.findFirst({
+			where: {
+				name: name,
+			},
+		})
+
+		if (!product) {
+			throw new BadRequestException(
+				`Product with this name: ${name} already exists.`,
+			)
+		}
 		return product
 	}
 }

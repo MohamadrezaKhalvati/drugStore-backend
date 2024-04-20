@@ -22,7 +22,7 @@ class CreateProductData {
 
 	@ApiProperty()
 	@IsEnum(ProductStatus)
-	role: ProductStatus
+	status: ProductStatus
 }
 
 export class CreateProductInput {

@@ -40,7 +40,7 @@ class ReadProductData {
 	@ApiPropertyOptional()
 	@IsOptional()
 	@IsEnum(ProductStatus)
-	role?: ProductStatus
+	status?: ProductStatus
 }
 
 export class ReadProductInput {

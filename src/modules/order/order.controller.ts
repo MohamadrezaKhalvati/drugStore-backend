@@ -4,6 +4,7 @@ import { IsLoggedIn } from '../auth/guards/is-logged-in.guard'
 import { CreateBillingAddressInput } from './dto/create-billingAddress.input'
 import { CreateOrderInput } from './dto/create-order.input'
 import { DeleteOrderInput } from './dto/delete-order.input'
+import { ReadBillingAddressInput } from './dto/read-billing-address.input'
 import { ReadOrderInput } from './dto/read-order.input'
 import { UpdateOrderInput } from './dto/update-order.input'
 import { OrderModel } from './model/order.model'
@@ -53,5 +54,15 @@ export class OrderController {
 	@ApiOperation({ operationId: 'createBillingAddress' })
 	@ApiBody({ type: CreateBillingAddressInput })
 	@ApiResponse({ status: 200 })
-	async createBillingAdress(@Body() input: CreateBillingAddressInput) {}
+	async createBillingAddress(@Body() input: CreateBillingAddressInput) {
+		return await this.orderService.createBillingAddress(input)
+	}
+
+	@Get('readBillingAddress')
+	@ApiOperation({ operationId: 'createBillingAddress' })
+	@ApiBody({ type: ReadBillingAddressInput })
+	@ApiResponse({ status: 200 })
+	async readBillingAddress(@Body() input: ReadBillingAddressInput) {
+		return await this.readBillingAddress(input)
+	}
 }

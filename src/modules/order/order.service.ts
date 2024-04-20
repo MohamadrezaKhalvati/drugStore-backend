@@ -8,6 +8,7 @@ import { ProductService } from '../product/product.service'
 import { CreateBillingAddressInput } from './dto/create-billingAddress.input'
 import { CreateOrderInput } from './dto/create-order.input'
 import { DeleteOrderInput } from './dto/delete-order.input'
+import { ReadBillingAddressInput } from './dto/read-billing-address.input'
 import { ReadOrderInput } from './dto/read-order.input'
 import { UpdateOrderInput } from './dto/update-order.input'
 
@@ -75,27 +76,26 @@ export class OrderService {
 		} = input
 		await this.verfiyIfOrderExistnce(id)
 
-		const deleteOrderProduct = await this.prisma.orderProduct.delete({
+		const deleteOrderProduct = this.prisma.orderProduct.delete({
 			where: { orderId: id },
 		})
 
-		const deleteOrder = await this.prisma.order.delete({
+		const deleteOrder = this.prisma.order.delete({
 			where: { id },
 		})
 
-		const deleteBillingAddress = await this.prisma.billingAddress.delete({
+		const deleteBillingAddress = this.prisma.billingAddress.delete({
 			where: {
-				id: deleteOrderProduct.billingAddressId,
+				id: 'ads',
 			},
 		})
 
-		// const transaction = await this.prisma.$transaction([
-		// 	deleteBillingAddress,
-		// 	deleteOrderProduct,
-		// 	deleteOrder,
-		// ])
-
-		// return transaction
+		const transaction = await this.prisma.$transaction([
+			deleteBillingAddress,
+			deleteOrderProduct,
+			deleteOrder,
+		])
+		return transaction
 	}
 
 	async verfiyIfOrderExistnce(id: string) {
@@ -123,5 +123,41 @@ export class OrderService {
 			)
 		}
 		return billingAdd
+	}
+
+	async readBillingAddress(input: ReadBillingAddressInput) {
+		const rawWhere = input.data || {}
+
+		let whereClause: Prisma.BillingAddressWhereInput = {
+			id: rawWhere.id,
+			city: rawWhere.city,
+			country: rawWhere.country,
+			postalCode: rawWhere.postalCode,
+		}
+
+		whereClause = cleanDeep(whereClause)
+
+		const count = this.prisma.billingAddress.count({ where: whereClause })
+		const entity = this.prisma.user.findMany({
+			where: whereClause,
+			...input?.sortyBy?.convertToPrismaFilter(),
+			...input?.pagination?.convertToPrismaFilter(),
+		})
+
+		return await createPaginationResult({ count, entity })
+	}
+
+	async deleteBillingAddress(id: string) {
+		const address = await this.prisma.billingAddress.delete({
+			where: {
+				id,
+			},
+		})
+
+		if (!address) {
+			throw new NotFoundException(
+				`billing address with this id ${id} not found`,
+			)
+		}
 	}
 }
