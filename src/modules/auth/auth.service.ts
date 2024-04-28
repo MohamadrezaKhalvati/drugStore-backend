@@ -35,7 +35,6 @@ export class AuthService {
 
 	async login(input: LoginInput) {
 		const user = await this.verifyUserForLogin(input)
-
 		const payload: JwtPayloadType = {
 			id: user.id,
 			username: user.username.toLowerCase(),

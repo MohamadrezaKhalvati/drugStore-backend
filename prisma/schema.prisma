@@ -69,9 +69,8 @@ model BillingAddress {
 
 model Customer {
     id             String        @id @default(uuid()) @db.Uuid
-    name           String
-    orderHistory   String
-    paymentMethod  String
+    fullName       String
+    paymentMethod  PaymentMethod
     contanctInfoId String        @db.Uuid
     createDate     DateTime      @default(now())
     updateDate     DateTime      @updatedAt()
@@ -79,9 +78,17 @@ model Customer {
     Order          Order[]
 }
 
+enum PaymentMethod {
+    CASH
+    CREDIT_CARD
+    DEBIT_CARD
+    PAYPAL
+    OTHER
+}
+
 model ContanctInfo {
     id          String     @id @default(uuid()) @db.Uuid
-    phoneNumber String
+    phoneNumber Int
     email       String
     createDate  DateTime   @default(now())
     updateDate  DateTime   @updatedAt()
