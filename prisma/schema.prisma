@@ -12,7 +12,7 @@ model User {
     name        String
     username    String   @unique
     email       String   @unique
-    phoneNumber Int      @unique
+    phoneNumber String   @unique
     password    String   @unique
     isActive    Boolean  @default(true)
     role        Role?    @default(Normal)

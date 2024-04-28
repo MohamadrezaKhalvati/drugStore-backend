@@ -9,12 +9,12 @@ export class CreateUserInput {
 
 	@ApiProperty()
 	@IsString()
-	//   @IsHash()
-	hashedPassword: string
+	password: string
 
 	@ApiProperty()
 	@IsPhoneNumber('IR')
-	phoneNumber: number
+	@IsString()
+	phoneNumber: string
 
 	@ApiProperty()
 	@IsString()

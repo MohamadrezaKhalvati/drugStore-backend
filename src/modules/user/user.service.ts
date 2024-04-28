@@ -29,7 +29,7 @@ export class UserService {
 		const user = await this.prisma.user.create({
 			data: {
 				email: input.email,
-				password: input.hashedPassword,
+				password: input.password,
 				username: input.username,
 				role: input.role,
 				name: input.name,
@@ -151,7 +151,7 @@ export class UserService {
 	}
 
 	private async verifyIsPhoneNumberNotDuplicate(
-		phoneNumber: number,
+		phoneNumber: string,
 		requesterId: string,
 	) {
 		const duplicateUser = await this.prisma.user.findMany({

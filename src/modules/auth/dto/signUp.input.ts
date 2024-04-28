@@ -23,7 +23,8 @@ export class SignUpInput {
 
 	@ApiProperty()
 	@IsPhoneNumber('IR')
-	phoneNumber: number
+	@IsString()
+	phoneNumber: string
 
 	@ApiProperty()
 	@IsString()

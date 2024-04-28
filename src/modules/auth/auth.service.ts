@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import crypto from 'crypto'
+import { hash } from 'bcrypt'
 import { PrismaService } from '../prisma/prisma.service'
-import { CreateUserInput } from '../user/dto/create-user.input'
 import { UserService } from '../user/user.service'
 import { LoginInput } from './dto/login.input'
 import { SignUpInput } from './dto/signUp.input'
@@ -21,16 +20,16 @@ export class AuthService {
 			input.confirmPassword,
 		)
 
-		const hashedPassword = await this.hashedPassword(input.password)
-		const createUserInput: CreateUserInput = {
-			email: input.email.toLowerCase(),
-			username: input.username.toLowerCase(),
-			phoneNumber: input.phoneNumber,
-			hashedPassword: hashedPassword,
-			role: input.role,
-			name: input.name,
-		}
-		return await this.userService.createUser(createUserInput)
+		const hashedPassword = await this.createHashedPassword(input.password)
+		// const createUserInput: CreateUserInput = {
+		// 	email: input.email.toLowerCase(),
+		// 	username: input.username.toLowerCase(),
+		// 	phoneNumber: input.phoneNumber,
+		// 	password: hashedPassword,
+		// 	role: input.role,
+		// 	name: input.name,
+		// }
+		// return await this.userService.createUser(createUserInput)
 	}
 
 	async login(input: LoginInput) {
@@ -57,7 +56,7 @@ export class AuthService {
 
 	async verifyUserForLogin(input: LoginInput) {
 		const { username, password } = input
-		const hashedPassword = await this.hashedPassword(password)
+		const hashedPassword = await this.createHashedPassword(password)
 		const user = await this.prisma.user.findFirst({
 			where: {
 				username: username.toLowerCase(),
@@ -77,11 +76,9 @@ export class AuthService {
 		return this.jwt.sign(input)
 	}
 
-	async hashedPassword(mainPassword: string) {
-		const hash = await crypto
-			.pbkdf2Sync(mainPassword, 'salt', 1000, 64, `sha512`)
-			.toString('hex')
-		return hash
+	async createHashedPassword(mainPassword: string) {
+		const hashedPassword = await hash(mainPassword, 12)
+		return hashedPassword
 	}
 }
 type PayloadType = {
