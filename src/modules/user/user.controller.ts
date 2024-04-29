@@ -10,14 +10,6 @@ import { UserService } from './user.service'
 export class UserController {
 	constructor(private userService: UserService) {}
 
-	// @Post('createUser')
-	// @ApiOperation({ operationId: 'createUser' })
-	// @ApiBody({ type: CreateUserInput })
-	// @ApiResponse({ status: 200 })
-	// async createUser(@Body() input: CreateUserInput) {
-	// 	return await this.userService.createUser(input)
-	// }
-
 	@Put('updateUser')
 	@ApiOperation({ operationId: 'updateUser' })
 	@ApiResponse({ status: 200 })

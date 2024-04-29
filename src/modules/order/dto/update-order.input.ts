@@ -1,8 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { OrderStatus } from '@prisma/client'
 import { Type } from 'class-transformer'
-import { IsString, ValidateNested } from 'class-validator'
+import {
+	IsEnum,
+	IsOptional,
+	IsString,
+	IsUUID,
+	ValidateNested,
+} from 'class-validator'
 
-class UpdateOrderData {}
+class UpdateOrderData {
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsUUID()
+	customerId?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsUUID()
+	notes?: string
+
+	@ApiPropertyOptional()
+	@IsOptional()
+	@IsEnum(OrderStatus)
+	status: OrderStatus
+}
 
 export class UpdateOrderInput {
 	@ApiProperty()

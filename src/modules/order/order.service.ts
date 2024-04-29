@@ -67,7 +67,26 @@ export class OrderService {
 		return await createPaginationResult({ count, entity })
 	}
 
-	async updateOrder(input: UpdateOrderInput) {}
+	async updateOrder(input: UpdateOrderInput) {
+		const { data, id } = input
+		const updatingOrder = await this.prisma.order.findUnique({
+			where: { id },
+		})
+
+		const customerId = data.customerId || updatingOrder.customerId
+		const notes = data.notes || updatingOrder.notes
+		const status = data.status || updatingOrder.status
+
+		const updatedOrder = await this.prisma.order.update({
+			where: { id: id },
+			data: {
+				customerId: customerId,
+				notes: notes,
+				status: status,
+			},
+		})
+		return updatedOrder
+	}
 
 	async deleteOrder(input: DeleteOrderInput) {
 		const { id } = input
