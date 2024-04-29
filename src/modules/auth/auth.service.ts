@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcrypt'
 import { PrismaService } from '../prisma/prisma.service'
+import { CreateUserInput } from '../user/dto/create-user.input'
 import { UserService } from '../user/user.service'
 import { LoginInput } from './dto/login.input'
 import { SignUpInput } from './dto/signUp.input'
@@ -21,15 +22,15 @@ export class AuthService {
 		)
 
 		const hashedPassword = await this.createHashedPassword(input.password)
-		// const createUserInput: CreateUserInput = {
-		// 	email: input.email.toLowerCase(),
-		// 	username: input.username.toLowerCase(),
-		// 	phoneNumber: input.phoneNumber,
-		// 	password: hashedPassword,
-		// 	role: input.role,
-		// 	name: input.name,
-		// }
-		// return await this.userService.createUser(createUserInput)
+		const createUserInput: CreateUserInput = {
+			email: input.email.toLowerCase(),
+			username: input.username.toLowerCase(),
+			phoneNumber: input.phoneNumber,
+			password: hashedPassword,
+			role: input.role,
+			name: input.name,
+		}
+		return await this.userService.createUser(createUserInput)
 	}
 
 	async login(input: LoginInput) {

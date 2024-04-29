@@ -64,7 +64,34 @@ export class ProductService {
 		return product
 	}
 
-	async updateProduct(input: UpdateProductInput) {}
+	async updateProduct(input: UpdateProductInput) {
+		const { data, id } = input
+		const updatingProduct = await this.prisma.product.findUnique({
+			where: { id },
+		})
+
+		const name = data.name?.toLowerCase() || updatingProduct.name
+		const description =
+			data.description?.toLowerCase() || updatingProduct.description
+		const price = data.price || updatingProduct.price
+
+		const imageUrl =
+			data.imageUrl?.toLowerCase() || updatingProduct.imageUrl
+
+		const status = data.status || updatingProduct.status
+
+		const updatedProduct = await this.prisma.product.update({
+			where: { id: id },
+			data: {
+				name: name,
+				description: description,
+				imageUrl: imageUrl,
+				price: price,
+				status: status,
+			},
+		})
+		return updatedProduct
+	}
 
 	async deleteProduct(input: DeleteProductInput) {
 		const { id } = input

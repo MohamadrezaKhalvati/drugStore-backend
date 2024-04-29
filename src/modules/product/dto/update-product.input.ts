@@ -34,7 +34,7 @@ class UpdateProductData {
 	@ApiPropertyOptional()
 	@IsOptional()
 	@IsEnum(ProductStatus)
-	role?: ProductStatus
+	status?: ProductStatus
 }
 
 export class UpdateProductInput {

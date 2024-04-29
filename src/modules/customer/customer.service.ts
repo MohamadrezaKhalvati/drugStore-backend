@@ -59,7 +59,26 @@ export class CustomerService {
 		return await createPaginationResult({ count, entity })
 	}
 
-	async updateCustomer(input: UpdateCustomerInput) {}
+	async updateCustomer(input: UpdateCustomerInput) {
+		const { data, id } = input
+		const updatingCustomer = await this.prisma.customer.findUnique({
+			where: { id: id },
+		})
+
+		const fullName =
+			data.fullName?.toLowerCase() || updatingCustomer.fullName
+		const paymentMehod =
+			data.paymentMethod || updatingCustomer.paymentMethod
+
+		const updatedCustomer = await this.prisma.customer.update({
+			where: { id },
+			data: {
+				fullName: fullName,
+				paymentMethod: paymentMehod,
+			},
+		})
+		return updatedCustomer
+	}
 
 	async deleteCustomer(input: DeleteCustomerInput) {
 		await this.verifyIfCustomerExistance(input.id)

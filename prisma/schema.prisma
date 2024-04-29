@@ -21,11 +21,12 @@ model User {
 }
 
 model Product {
-    id           String         @id @default(uuid()) @db.Uuid
-    name         String         @unique()
-    description  String
-    price        Float
-    imageUrl     String?
+    id          String  @id @default(uuid()) @db.Uuid
+    name        String  @unique()
+    description String
+    price       Float
+    imageUrl    String?
+
     createDate   DateTime       @default(now())
     updateDate   DateTime       @updatedAt()
     status       ProductStatus? @default(Available)
