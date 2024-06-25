@@ -23,6 +23,7 @@ export type TokenGuardData = {
 
 export type JwtPayloadType = {
 	username: string
+	email: string
 	id: string
 	role: 'Admin' | 'Normal' | 'Manager' | 'pharmacists'
 }

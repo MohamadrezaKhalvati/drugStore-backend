@@ -29,7 +29,6 @@ function setupSwagger(app: INestApplication) {
 		res.end(JSON.stringify(document)),
 	)
 
-	console.log()
 	return document
 }
 

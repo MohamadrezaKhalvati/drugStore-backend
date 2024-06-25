@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { hash } from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateUserInput } from '../user/dto/create-user.input'
 import { UserService } from '../user/user.service'
@@ -39,37 +39,31 @@ export class AuthService {
 			id: user.id,
 			username: user.username.toLowerCase(),
 			role: user.role,
+			email: user.email.toLowerCase(),
 		}
 
 		const token = await this.signPayload(payload)
 
-		return { jwt: token }
+		return { token }
 	}
 
 	private verifyPasswordEqualToConfirmPassword(
 		password: string,
-		confignPassword: string,
+		confirmPassword: string,
 	) {
-		password !== confignPassword
-			? console.log('error in verifyPasswordEqualToConfirmPassword')
-			: true
+		if (password !== confirmPassword) {
+			throw new Error('Password and Confirm Password do not match')
+		}
 	}
 
 	async verifyUserForLogin(input: LoginInput) {
-		const { username, password } = input
-		const hashedPassword = await this.createHashedPassword(password)
-		const user = await this.prisma.user.findFirst({
-			where: {
-				username: username.toLowerCase(),
-				password: hashedPassword,
-				isActive: true,
-			},
-		})
-
-		if (!user)
-			//TODO : error handling in verifyUserForLogin
-			console.log('err')
-
+		const { email, password } = input
+		
+		if (!user) {
+			throw new NotFoundException('User with this email does not exist')
+		}
+		const isMatch = await bcrypt.compare(password, user.password)
+		if (!isMatch) throw new NotFoundException('password is not correct')
 		return user
 	}
 
@@ -78,12 +72,14 @@ export class AuthService {
 	}
 
 	async createHashedPassword(mainPassword: string) {
-		const hashedPassword = await hash(mainPassword, 12)
-		return hashedPassword
+		const saltOrRounds = 10
+		const hash = await bcrypt.hash(mainPassword, saltOrRounds)
+		return hash
 	}
 }
 type PayloadType = {
 	id: string
 	username: string
+	email: string
 	role: string
 }

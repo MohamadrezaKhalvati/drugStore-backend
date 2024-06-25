@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma, Role } from '@prisma/client'
 import cleanDeep from 'clean-deep'
-import { createPaginationResult } from 'src/common/pagination.input'
 import { PrismaService } from '../prisma/prisma.service'
+import { createPaginationResult } from './../../common/pagination.input'
 import { CreateUserInput } from './dto/create-user.input'
 import { DeleteUserInput } from './dto/delete-user.input'
 import { ReadUserInput } from './dto/read-user.input'
@@ -12,6 +12,7 @@ export class UserService {
 	readonlySelectUser = {
 		id: true,
 		username: true,
+		name: true,
 		email: true,
 		role: true,
 		phoneNumber: true,
@@ -28,9 +29,9 @@ export class UserService {
 
 		const user = await this.prisma.user.create({
 			data: {
-				email: input.email,
+				email: input.email.toLowerCase(),
 				password: input.password,
-				username: input.username,
+				username: input.username.toLowerCase(),
 				role: input.role,
 				name: input.name,
 				phoneNumber: input.phoneNumber,
@@ -39,6 +40,8 @@ export class UserService {
 		})
 		return user
 	}
+
+	verify
 
 	async checkUniqueUsername(username: string) {
 		const user = await this.prisma.user.findUnique({

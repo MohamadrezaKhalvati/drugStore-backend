@@ -13,7 +13,7 @@ export class AuthController {
 	@Post('login')
 	@ApiOperation({ operationId: 'login' })
 	@ApiBody({ type: LoginInput })
-	@ApiResponse({ status: 200 })
+	@ApiResponse({ status: 201 })
 	async login(@Body() input: LoginInput) {
 		return await this.authService.login(input)
 	}

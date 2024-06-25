@@ -59,7 +59,7 @@ export class OrderController {
 	}
 
 	@Get('readBillingAddress')
-	@ApiOperation({ operationId: 'createBillingAddress' })
+	@ApiOperation({ operationId: 'readBillingAddress' })
 	@ApiBody({ type: ReadBillingAddressInput })
 	@ApiResponse({ status: 200 })
 	async readBillingAddress(@Body() input: ReadBillingAddressInput) {
