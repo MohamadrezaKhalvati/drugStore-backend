@@ -58,12 +58,19 @@ export class AuthService {
 
 	async verifyUserForLogin(input: LoginInput) {
 		const { email, password } = input
-		
+
+		const user = await this.prisma.user.findFirst({
+			where: {
+				email: email.toLowerCase(),
+				isActive: true,
+			},
+		})
 		if (!user) {
 			throw new NotFoundException('User with this email does not exist')
 		}
 		const isMatch = await bcrypt.compare(password, user.password)
 		if (!isMatch) throw new NotFoundException('password is not correct')
+
 		return user
 	}
 

@@ -1,4 +1,8 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common'
+import {
+	CanActivate,
+	ExecutionContext,
+	UnauthorizedException,
+} from '@nestjs/common'
 import { TokenGuardData } from './token.guard'
 
 export class IsLoggedIn implements CanActivate {
@@ -11,12 +15,8 @@ export class IsLoggedIn implements CanActivate {
 			result = true
 		} else {
 			if (tokenData.tokenError) {
-				console.log('VerifyToken Error:', tokenData.tokenError)
+				throw new UnauthorizedException('Not Authorized')
 			}
-			// throw Errors.createClientError({
-			// 	module: ModuleNames.AuthModule,
-			// 	code: 1,
-			// })
 		}
 
 		return result

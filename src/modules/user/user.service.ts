@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import {
+	BadRequestException,
+	ConflictException,
+	ForbiddenException,
+	Injectable,
+	NotFoundException,
+} from '@nestjs/common'
 import { Prisma, Role } from '@prisma/client'
 import cleanDeep from 'clean-deep'
 import { PrismaService } from '../prisma/prisma.service'
@@ -48,8 +54,7 @@ export class UserService {
 			where: { username },
 		})
 		if (user) {
-			//TODO :  error handling in checkUniqueUsername
-			console.log('This username is in the database')
+			throw new BadRequestException('Username is already exist')
 		}
 		return user
 	}
@@ -59,10 +64,9 @@ export class UserService {
 			where: { email },
 		})
 		if (user) {
-			//TODO :  error handling in checkUniqueUsername
-			console.log('This email is in the database')
+			throw new BadRequestException('Email is already exist')
 		}
-		return user // Return true if email is unique, false otherwise
+		return user
 	}
 
 	async readUser(input: ReadUserInput) {
@@ -146,11 +150,14 @@ export class UserService {
 		const foundUser = await this.prisma.user.findFirst({
 			where: {
 				id: requesterId,
-				role: Role.Admin,
+				role: Role.Administrator,
 			},
 		})
 
-		if (!foundUser) console.log('error in verifyAdminUser')
+		if (!foundUser)
+			throw new ForbiddenException(
+				'Access denied: Administrator role required',
+			)
 	}
 
 	private async verifyIsPhoneNumberNotDuplicate(
@@ -165,10 +172,14 @@ export class UserService {
 				phoneNumber = null
 				return phoneNumber
 			} else {
-				console.log('asdsad')
+				throw new ConflictException(
+					'The phone number is already in use',
+				)
 			}
 		} else if (duplicateUser.length > 1) {
-			console.log('asda')
+			throw new ConflictException(
+				'Multiple users found with the same phone number',
+			)
 		}
 
 		return phoneNumber
@@ -186,10 +197,14 @@ export class UserService {
 				email = null
 				return email
 			} else {
-				console.log('asdsad')
+				throw new ConflictException(
+					'The email address is already in use',
+				)
 			}
 		} else if (duplicateUser.length > 1) {
-			console.log('asda')
+			throw new ConflictException(
+				'Multiple users found with the same email address',
+			)
 		}
 
 		return email.toLowerCase()
@@ -201,7 +216,7 @@ export class UserService {
 				where: { username },
 			})
 			if (duplicateUsername) {
-				console.log('asda')
+				throw new ConflictException('The username is already in use')
 			}
 		}
 		if (email) {
@@ -209,7 +224,9 @@ export class UserService {
 				where: { email },
 			})
 			if (duplicateEmail) {
-				console.log('asdass')
+				throw new ConflictException(
+					'The email address is already in use',
+				)
 			}
 		}
 	}
@@ -227,10 +244,12 @@ export class UserService {
 				username = null
 				return username
 			} else {
-				console.log('sdfsfd')
+				throw new ConflictException('The username is already in use')
 			}
 		} else if (duplicateUser.length > 1) {
-			console.log('sdfsdf')
+			throw new ConflictException(
+				'Multiple users found with the same username',
+			)
 		}
 		return username.toLowerCase()
 	}
@@ -255,8 +274,7 @@ export class UserService {
 			select: this.readonlySelectUser,
 		})
 		if (!user) {
-			//TODO : error handling in verifyIfUserExistance
-			console.log('error in verifyIfUserExistance')
+			throw new NotFoundException(`User with ID ${id} not found`)
 		}
 		return user
 	}

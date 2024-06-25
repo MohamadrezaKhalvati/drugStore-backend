@@ -1,5 +1,7 @@
+import { NotFoundException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Role } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
 import { UserService } from '../user/user.service'
 import { AuthService } from './auth.service'
@@ -13,12 +15,11 @@ class UserServiceMock {
 }
 
 class PrismaServiceMock {
-	async user_findFirst(where: any) {
-		return {
-			id: '123',
-			password:
-				'$2b$10$B.2IUrL8P51vGcO7LgG9fOQ2V9l4F1X2uA5N.1mr7A9A3IY.gmQl2',
-		}
+	async cleanDatabase() {
+		const models = Reflect.ownKeys(this).filter(
+			key => typeof key === 'string',
+		)
+		await Promise.all(models.map(modelKey => this[modelKey].deleteMany()))
 	}
 }
 
@@ -42,76 +43,64 @@ describe('AuthService', () => {
 		expect(authService).toBeDefined()
 	})
 
-	// describe('signUp', () => {
-	// 	it('should create a new user', async () => {
-	// 		const signUpInput: SignUpInput = {
-	// 			email: 'test@example.com',
-	// 			username: 'testuser',
-	// 			password: 'password123',
-	// 			confirmPassword: 'password123',
-	// 			phoneNumber: '1234567890',
-	// 			role: 'Admin',
-	// 			name: 'Test User',
-	// 		}
-
-	// 		const result = await authService.signUp(signUpInput)
-	// 		expect(result).toBeDefined()
-	// 		expect(result.email).toBe(signUpInput.email.toLowerCase())
-	// 		expect(result.username).toBe(signUpInput.username.toLowerCase())
-	// 		expect(result.phoneNumber).toBe(signUpInput.phoneNumber)
-	// 		expect(result.role).toBe(signUpInput.role)
-	// 		expect(result.name).toBe(signUpInput.name)
-	// 	})
-
-	// 	it('should throw error if passwords do not match', async () => {
-	// 		const signUpInput: SignUpInput = {
-	// 			email: 'test@example.com',
-	// 			username: 'testuser',
-	// 			password: 'password123',
-	// 			confirmPassword: 'password456',
-	// 			phoneNumber: '1234567890',
-	// 			role: 'Admin',
-	// 			name: 'Test User',
-	// 		}
-	// 		await expect(authService.signUp(signUpInput)).rejects.toThrowError(
-	// 			'Password and Confirm Password do not match',
-	// 		)
-	// 	})
-	// })
-
-	describe('login', () => {
-		it('should return a JWT token on successful login', async () => {
+	describe('signUp', () => {
+		it('should create a new user', async () => {
 			const signUpInput: SignUpInput = {
 				email: 'test@example.com',
 				username: 'testuser',
 				password: 'password123',
 				confirmPassword: 'password123',
 				phoneNumber: '1234567890',
-				role: 'Admin',
+				role: Role.Administrator,
 				name: 'Test User',
 			}
 
 			const result = await authService.signUp(signUpInput)
 			expect(result).toBeDefined()
+			expect(result.email).toBe(signUpInput.email.toLowerCase())
+			expect(result.username).toBe(signUpInput.username.toLowerCase())
+			expect(result.phoneNumber).toBe(signUpInput.phoneNumber)
+			expect(result.role).toBe(signUpInput.role)
+			expect(result.name).toBe(signUpInput.name)
+		})
 
+		it('should throw error if passwords do not match', async () => {
+			const signUpInput: SignUpInput = {
+				email: 'test@example.com',
+				username: 'testuser',
+				password: 'password123',
+				confirmPassword: 'password456',
+				phoneNumber: '1234567890',
+				role: Role.Administrator,
+				name: 'Test User',
+			}
+			await expect(authService.signUp(signUpInput)).rejects.toThrowError(
+				'Password and Confirm Password do not match',
+			)
+		})
+	})
+
+	describe('login', () => {
+		it('should return a JWT token on successful login', async () => {
 			const loginInput: LoginInput = {
 				email: 'test@example.com',
 				password: 'password123',
 			}
 
 			const output = await authService.login(loginInput)
+
 			expect(output.token).toBeDefined()
 		})
 
-		// it('should throw NotFoundException if password is incorrect', async () => {
-		// 	const loginInput: LoginInput = {
-		// 		email: 'test@example.com',
-		// 		password: 'wrongpassword', // Incorrect password
-		// 	}
+		it('should throw NotFoundException if password is incorrect', async () => {
+			const loginInput: LoginInput = {
+				email: 'test@example.com',
+				password: 'wrongpassword', // Incorrect password
+			}
 
-		// 	await expect(authService.login(loginInput)).rejects.toThrowError(
-		// 		NotFoundException,
-		// 	)
-		// })
+			await expect(authService.login(loginInput)).rejects.toThrowError(
+				NotFoundException,
+			)
+		})
 	})
 })

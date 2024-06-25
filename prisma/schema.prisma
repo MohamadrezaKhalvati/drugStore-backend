@@ -13,7 +13,7 @@ model User {
     username    String   @unique
     email       String   @unique
     phoneNumber String   @unique
-    password    String   @unique
+    password    String
     isActive    Boolean  @default(true)
     role        Role?    @default(Normal)
     createDate  DateTime @default(now())

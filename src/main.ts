@@ -41,7 +41,7 @@ async function bootstrap() {
 	setupSwagger(app)
 	setupGlobalValidation(app)
 	setupCors(app)
-	await app.listen(8000)
+	await app.listen(3001)
 }
 
 bootstrap()

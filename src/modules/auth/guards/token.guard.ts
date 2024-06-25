@@ -5,13 +5,14 @@ import {
 	Inject,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { Role } from '@prisma/client'
 import { PrismaService } from 'src/modules/prisma/prisma.service'
 
 export type TokenGuardData = {
 	user?: {
 		id: string
 		username: string
-		role: 'Admin' | 'Normal' | 'Manager' | 'pharmacists'
+		role: Role
 	}
 	tokenError?: {
 		name: string
@@ -25,7 +26,7 @@ export type JwtPayloadType = {
 	username: string
 	email: string
 	id: string
-	role: 'Admin' | 'Normal' | 'Manager' | 'pharmacists'
+	role: Role
 }
 
 export class TokenGuard implements CanActivate {
